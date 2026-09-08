@@ -2,8 +2,7 @@
 
 const STORAGE_KEY = "github_style_countries_data_v1";
 
-// API KEY của bạn
-const API_KEY = "rc_live_b6b2261a7f7b417ebc0e9e7eb243bf72"; 
+const API_ROUTE = "/api/countries";
 
 const state = {
   savedCountries: [],
@@ -216,19 +215,12 @@ async function handleSearchApi(e) {
 
   try {
     const response = await fetch(
-      `https://api.restcountries.com/countries/v5?q=${encodeURIComponent(query)}&limit=5`,
-      {
-        headers: {
-          Authorization: `Bearer ${API_KEY}`
-        }
-      }
+      `${API_ROUTE}?q=${encodeURIComponent(query)}&limit=5`
     );
 
-    if (!response.ok) {
-      throw new Error("Không thể kết nối đến API quốc gia.");
-    }
-
     const data = await response.json();
+    if (!response.ok) throw new Error(data.error || "Không thể kết nối đến API quốc gia.");
+
     const countries = data.data?.objects;
     if (!Array.isArray(countries) || countries.length === 0) {
       throw new Error("Không tìm thấy quốc gia phù hợp.");
