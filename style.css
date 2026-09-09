@@ -426,3 +426,13 @@ body {
   gap: 8px;
   margin-top: 8px;
 }
+
+.countryname{
+  position: overlay;
+  color: rgb(97, 97, 231);
+  font-size: 12px;
+  width: 100%;
+  left: 0;
+  padding: 2px;
+  background: var(--bg-muted);
+}

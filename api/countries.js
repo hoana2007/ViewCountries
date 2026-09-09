@@ -30,9 +30,17 @@ export default async function handler(request, response) {
       }
     });
     const body = await upstreamResponse.text();
+    let payload;
 
-    response.setHeader("Content-Type", "application/json");
-    return response.status(upstreamResponse.status).send(body);
+    try {
+      payload = JSON.parse(body);
+    } catch {
+      payload = {
+        error: body || "REST Countries API trả về dữ liệu không hợp lệ."
+      };
+    }
+
+    return response.status(upstreamResponse.status).json(payload);
   } catch (error) {
     return response.status(502).json({
       error: "Không thể kết nối đến REST Countries API."

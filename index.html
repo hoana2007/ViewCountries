@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Tra cứu và quản lý thông tin quốc gia REST Countries">
-  <title>hoana2007 - Countries Explorer</title>
+  <meta name="description" content="Tra cứu và quản lý thông tin quốc gia View Countries">
+  <title>hoana2007 - View Countries Explorer</title>
   <link rel="stylesheet" href="style.css">
   <!-- Thư viện html2canvas dùng cho tính năng chụp ảnh màn hình -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -17,7 +17,7 @@
           <path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"></path>
           <path d="M8 3.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9ZM5 8a3 3 0 1 1 6 0 3 3 0 0 1-6 0Z"></path>
         </svg>
-        <span class="brand-title">Country Explorer</span>
+        <span class="brand-title">CountryExplorer</span>
       </div>
       <div class="header-actions">
         <button id="theme-toggle" class="btn btn-sm" aria-label="Đổi giao diện">
@@ -35,18 +35,15 @@
           type="text" 
           id="search-input" 
           class="form-control" 
-          placeholder="Nhập tên quốc gia (VD: Vietnam, Japan, France... bằng tiếng Anh)"
+          placeholder="Nhập tên quốc gia (VD: Vietnam, Japan, France...)"
           aria-label="Tên quốc gia"
           required
         >
-        <br>
-        <label>Nhập tên quốc gia bằng tiếng Anh</label>
-        <br>
         <button type="submit" class="btn btn-primary">
           🔍 Tìm kiếm
         </button>
+        
       </form>
-
       <div class="toolbar-actions">
         <input 
           type="text" 
@@ -59,6 +56,9 @@
           ➕ Thêm quốc gia mới
         </button>
       </div>
+      <div class = "countryname">
+        <label>(Nhập tên tiếng Anh của Quốc gia cần tìm kiếm)</label>
+      </div>  
     </section>
 
     <!-- Feedback Banner -->
@@ -167,7 +167,7 @@
   <!-- Chân trang (Footer) -->
   <footer class="app-footer">
     <div class="container footer-container">
-      <p>&copy; 2026 - hoana2007 - Countries Explorer</p>
+      <p>&copy; 2026 - hoana2007 - View Countries</p>
     </div>
   </footer>
 

@@ -218,7 +218,15 @@ async function handleSearchApi(e) {
       `${API_ROUTE}?q=${encodeURIComponent(query)}&limit=5`
     );
 
-    const data = await response.json();
+    const responseText = await response.text();
+    let data;
+
+    try {
+      data = JSON.parse(responseText);
+    } catch {
+      throw new Error(responseText || "API quốc gia trả về dữ liệu không hợp lệ.");
+    }
+
     if (!response.ok) throw new Error(data.error || "Không thể kết nối đến API quốc gia.");
 
     const countries = data.data?.objects;
@@ -295,6 +303,7 @@ function renderDetail(country) {
   elements.countryDetailCard.classList.remove("hidden");
 
   elements.dataSourceBadge.textContent = country.isCustom ? "Tự tạo (Local)" : "REST Countries API";
+  elements.detailFlag.crossOrigin = "anonymous";
   elements.detailFlag.src = country.flag || "";
   elements.detailName.textContent = country.name;
   elements.detailOfficialName.textContent = country.officialName || country.name;
@@ -328,20 +337,35 @@ function handleShare() {
   });
 }
 
-function handleScreenshot() {
+async function handleScreenshot() {
   const target = document.getElementById("capture-area");
-  if (!target) return;
+  if (!target || !state.selectedCountry) return;
 
   showToast("Đang tạo ảnh màn hình...");
-  html2canvas(target).then(canvas => {
+
+  try {
+    const flag = elements.detailFlag;
+    if (flag.src && !flag.complete) {
+      await new Promise((resolve, reject) => {
+        flag.addEventListener("load", resolve, { once: true });
+        flag.addEventListener("error", reject, { once: true });
+      });
+    }
+
+    const canvas = await html2canvas(target, {
+      useCORS: true,
+      allowTaint: false,
+      imageTimeout: 15000
+    });
     const link = document.createElement("a");
     link.download = `${state.selectedCountry.name}_info.png`;
     link.href = canvas.toDataURL();
     link.click();
     showToast("Đã tải ảnh màn hình thành công!");
-  }).catch(() => {
+  } catch (error) {
+    console.error("Lỗi khi chụp ảnh quốc gia:", error);
     showToast("Không thể chụp ảnh màn hình.", true);
-  });
+  }
 }
 
 function handleExportTxt() {
