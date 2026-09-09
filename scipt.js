@@ -85,7 +85,10 @@ function normalizeApiData(apiCountry) {
   const officialName = apiCountry.names?.official || apiCountry.name?.official || "";
 
   // Xử lý Cờ
-  const flag = apiCountry.flag?.png || apiCountry.flag?.url_png || apiCountry.flags?.png || apiCountry.flags?.svg || "";
+  const flagSource = apiCountry.flag?.png || apiCountry.flag?.url_png || apiCountry.flags?.png || apiCountry.flags?.svg || "";
+  const flag = flagSource.startsWith("https://flags.restcountries.com/")
+    ? `/api/flag?url=${encodeURIComponent(flagSource)}`
+    : flagSource;
 
   // Xử lý Thủ đô
   let capital = "N/A";
@@ -304,7 +307,10 @@ function renderDetail(country) {
 
   elements.dataSourceBadge.textContent = country.isCustom ? "Tự tạo (Local)" : "REST Countries API";
   elements.detailFlag.crossOrigin = "anonymous";
-  elements.detailFlag.src = country.flag || "";
+  const flagUrl = country.flag || "";
+  elements.detailFlag.src = flagUrl.startsWith("https://flags.restcountries.com/")
+    ? `/api/flag?url=${encodeURIComponent(flagUrl)}`
+    : flagUrl;
   elements.detailName.textContent = country.name;
   elements.detailOfficialName.textContent = country.officialName || country.name;
   elements.detailCapital.textContent = country.capital || "N/A";
@@ -345,7 +351,7 @@ async function handleScreenshot() {
 
   try {
     const flag = elements.detailFlag;
-    if (flag.src && !flag.complete) {
+    if (flag.src && (!flag.complete || flag.naturalWidth === 0)) {
       await new Promise((resolve, reject) => {
         flag.addEventListener("load", resolve, { once: true });
         flag.addEventListener("error", reject, { once: true });
